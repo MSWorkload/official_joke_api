@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joke-deploy
+  labels:
+    app: joke-deploy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joke-deploy
+  template:
+    metadata:
+      labels:
+        app: joke-deploy
+    spec:
+      containers:
+        - name: joke-deploy
+          image: smallshop.azurecr.io/jokewf:latest
+          ports:
+            - containerPort: 3005
