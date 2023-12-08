@@ -1,12 +1,14 @@
 const express = require('express');
 const LimitingMiddleware = require('limiting-middleware');
 const { randomJoke, randomTen, randomSelect, jokeByType, jokeById } = require('./handler');
+require('dotenv').config();
 
 let appInsights = require('applicationinsights');
 
 const app = express();
 
-appInsights.setup("InstrumentationKey=d3f58596-52b5-4e0b-a0f9-df6535eb2bd0;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/").setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).setSendLiveMetrics(true).start();
+const connectionString = process.env.CONNECTION_STRING;
+appInsights.setup(connectionString).setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).setSendLiveMetrics(true).start();
 
 
 // appInsights.defaultClient.config.samplingPercentage = 100; // 33% of all telemetry will be sent to Application Insights
