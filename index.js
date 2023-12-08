@@ -8,6 +8,15 @@ const TelemetryClient = require('applicationinsights/out/Library/TelemetryClient
 
 const app = express();
 
+let start = Date.now();
+const server = app.listen(process.env.PORT || 3000, () => {
+  let duration = Date.now() - start;
+  appInsights.defaultClient.trackMetric({name: "server startup time", value: duration});
+  console.log(`Server is listening on port ${process.env.PORT || 3000}`);
+});
+
+
+
 const connectionString = process.env.CONNECTION_STRING;
 appInsights
   .setup(connectionString)
@@ -119,5 +128,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
+// const PORT = process.env.PORT || 3005;
+// app.listen(PORT, () => console.log(`listening on ${PORT}`));
