@@ -4,11 +4,20 @@ const { randomJoke, randomTen, randomSelect, jokeByType, jokeById } = require('.
 require('dotenv').config();
 
 let appInsights = require('applicationinsights');
+const TelemetryClient = require('applicationinsights/out/Library/TelemetryClient');
 
 const app = express();
 
 const connectionString = process.env.CONNECTION_STRING;
-appInsights.setup(connectionString).setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).setSendLiveMetrics(true).start();
+appInsights
+  .setup(connectionString)
+  .setAutoDependencyCorrelation(true)
+  .setAutoCollectRequests(true)
+  .setAutoCollectPerformance(true, true)
+  .setAutoCollectExceptions(true)
+  .setUseDiskRetryCaching(true)
+  .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+  .setSendLiveMetrics(true).start();
 
 
 
@@ -33,16 +42,22 @@ app.get('/ping', (req, res) => {
 });
 
 app.get('/random_joke', (req, res) => {
+  
+  if ( req.method === "GET" ) {
+    appInsights.defaultClient.trackNodeHttpRequest({ request: req, response: res });
+    
+  }
+  
   //create a delay in response
-  const start = Date.now();
+  // const start = Date.now();
     
 
   // while (Date.now() - start < 1000) {
   //   // do nothing
   // }
 
-  console.log('random_joke called and logged in the container');
-  throw new Error('Something went wrong');
+  // console.log('random_joke called and logged in the container');
+  // throw new Error('Something went wrong');
   res.json(randomJoke());
 });
 
