@@ -26,6 +26,11 @@ app.get('/ping', (req, res) => {
 });
 
 app.get('/random_joke', (req, res) => {
+  //create a delay in response
+  const start = Date.now();
+  while (Date.now() - start < 1000) {
+    // do nothing
+  }
  console.log('random_joke called and logged in the container');
   res.json(randomJoke());
 });
