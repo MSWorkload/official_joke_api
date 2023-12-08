@@ -11,7 +11,7 @@ const connectionString = process.env.CONNECTION_STRING;
 appInsights.setup(connectionString).setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).setSendLiveMetrics(true).start();
 
 
-// appInsights.defaultClient.config.samplingPercentage = 100; // 33% of all telemetry will be sent to Application Insights
+
 
 
 
@@ -35,10 +35,14 @@ app.get('/ping', (req, res) => {
 app.get('/random_joke', (req, res) => {
   //create a delay in response
   const start = Date.now();
-  while (Date.now() - start < 1000) {
-    // do nothing
-  }
- console.log('random_joke called and logged in the container');
+    
+
+  // while (Date.now() - start < 1000) {
+  //   // do nothing
+  // }
+
+  console.log('random_joke called and logged in the container');
+  throw new Error('Something went wrong');
   res.json(randomJoke());
 });
 
